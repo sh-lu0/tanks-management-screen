@@ -91,25 +91,25 @@ Group www
 * PHP7.2を入手するためのリポジトリを追加  
 `yum -y install http://rpms.famillecollet.com/enterprise/remi-release-7.rpm`
 * `yum list installed | grep php`として，古い(バージョン5.4)phpが残っていないことを確認
-** 残っていた場合は`yum remove php*`で削除
+  - 残っていた場合は`yum remove php*`で削除
 * PHP7.2のインストール  
 `yum -y install --enablerepo=remi,remi-php72 php php-mbstring php-xml php-xmlrpc php-gd php-pdo php-pecl-mcrypt php-mysqlnd php-pecl-mysql`
-** `php -v`としてバージョン7.2のphpがインストールされたことを確認
+  - `php -v`としてバージョン7.2のphpがインストールされたことを確認
 * タイムゾーンの設定
-** 設定ファイルをバックアップ `cp -p /etc/php.ini /etc/php.ini.org`
-** `vi /etc/php.ini`として設定ファイルを開き，  
+  - 設定ファイルをバックアップ `cp -p /etc/php.ini /etc/php.ini.org`
+  - `vi /etc/php.ini`として設定ファイルを開き，  
 `;date.timezone =` を`;date.timezone = "Asia/Tokyo"`に変更
-** Apacheを再起動`systemctl restart httpd`
+  - Apacheを再起動`systemctl restart httpd`
 * テストページを作成
-** `vi /var/www/html/index.php`に`<?php phpinfo() ?>`と記述して保存
-** ホストOS側で`http://192.168.33.10/index.php`にアクセスしてPHPの情報が表示されればOK
+  - `vi /var/www/html/index.php`に`<?php phpinfo() ?>`と記述して保存
+  - ホストOS側で`http://192.168.33.10/index.php`にアクセスしてPHPの情報が表示されればOK
 
 ## MySQLインストールと設定
 * `yum remove mariadb-libs` でmariaDB関連を削除
 * `yum list installed | grep mariadb`でなにもリストされなければOK
 * MySQL公式リポジトリを追加  
 `yum -y install http://rpms.famillecollet.com/enterprise/remi-release-7.rpm`
-** [公式](https://dev.mysql.com/downloads/repo/yum/)の中央下方にある  
+  - [公式](https://dev.mysql.com/downloads/repo/yum/)の中央下方にある  
 Red Hat Enterprise Linux 7 / Oracle Linux 7 (Architecture Independent),   
 RPM Packageの真下の括弧内に記述されたリポジトリが、2019年5月時点で  
 `mysql80-community-release-el7-3.noarch.rpm`であるためこれを追加した。
@@ -119,25 +119,25 @@ RPM Packageの真下の括弧内に記述されたリポジトリが、2019年5�
 * `/var/log/mysqld.log`に初期パスワードが記載されているのでgrepして調べる  
 `grep password /var/log/mysqld.log`
 * `mysql_secure_installation`を実行して初期設定
-** rootのパスワードを聞かれるので先ほどgrepして調べたものを入力
-** それ以降はすべてyesで解答
+  - rootのパスワードを聞かれるので先ほどgrepして調べたものを入力
+  - それ以降はすべてyesで解答
 * `mysql -u root -p`を実行して先ほど設定したパスワードを入力してMySQLサーバにログイン
 * `ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY 'YOUR_ROOT_PASSWORD'`  
 を実行してパスワードの形式を変えておく
-** これをやっておかないとCodeIgniterからのアクセスでエラーが出る
+  - これをやっておかないとCodeIgniterからのアクセスでエラーが出る
 * 動作確認のため，簡単なテーブルを作成
-** `CREATE DATABASE test_db` で新しいデータベースを作成
-** `use test_db` で使うデータベースを変更
-** `CREATE TABLE name(id INTEGER, name VARCHAR(100));` としてテーブルを作成
-** `INSERT INTO name VALUES (0, "Alice"), (1, "Bob"), (2, "Charlie") `としてテーブルnameに行を追加
-** `SELECT * FROM name`で追加されていることを確認
+  - `CREATE DATABASE test_db` で新しいデータベースを作成
+  - `use test_db` で使うデータベースを変更
+  - `CREATE TABLE name(id INTEGER, name VARCHAR(100));` としてテーブルを作成
+  - `INSERT INTO name VALUES (0, "Alice"), (1, "Bob"), (2, "Charlie") `としてテーブルnameに行を追加
+  - `SELECT * FROM name`で追加されていることを確認
 * `exit` で終了
 
 ## CodeIgniter動作確認
 ### 接続確認
 - ダウンロードして中身を共有ファイルの中に入れる
-- ｀cd /var/www/html｀
-- ｀vi application/controllers/Hello.php｀
+- `cd /var/www/html`
+- `vi application/controllers/Hello.php`
 ```
 class Test extends CI_Controller {
               public function index()
